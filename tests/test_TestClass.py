@@ -7,7 +7,7 @@ class TestTestClass(unittest.TestCase):
         self.test_obj = TestClass()
 
     def test_add_integers(self):
-        self.assertEqual(3, self.test_obj.add_integers(1, 3))
+        self.assertEqual(4, self.test_obj.add_integers(1, 3))
 
     def test_abs(self):
         self.assertEqual(3, self.test_obj.abs(3))

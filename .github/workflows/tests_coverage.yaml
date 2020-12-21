@@ -2,7 +2,7 @@ name: Unittests and Code Coverage
 
 on:
   push:
-    branches: [master, project_setup]
+    branches: [master]
   pull_request:
     branches: [master]
 

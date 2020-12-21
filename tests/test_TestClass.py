@@ -11,4 +11,4 @@ class TestTestClass(unittest.TestCase):
 
     def test_abs(self):
         self.assertEqual(3, self.test_obj.abs(3))
-        self.assertEqual(-3, self.test_obj.abs(-3))
+        self.assertEqual(3, self.test_obj.abs(-3))

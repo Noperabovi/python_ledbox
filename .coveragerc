@@ -3,5 +3,6 @@
 [run]
 omit =
         *__init__*
-#        *tests*
+        *tests*
+        
 branch = True

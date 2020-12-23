@@ -30,7 +30,7 @@ jobs:
       # - name: Install Dependencies
       #   run: pipenv install --dev --pre
       - name: Print Dicrectory
-          run: ls -la
+        run: ls -la
       - name: Run Tests and Generate Coverate Report
         run: |
           pipenv run coverage run -m unittest discover

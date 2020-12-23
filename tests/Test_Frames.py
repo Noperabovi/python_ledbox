@@ -70,7 +70,7 @@ class TestFrame(unittest.TestCase):
 
         changes = frame.getChanges(flush=False)
         # stale frame should have changes
-        self.assertEquals(len(changes), 4)
+        self.assertEqual(len(changes), 4)
 
         self.assertEqual(changes[0 * frame.COLS + 0], 15899247)
         self.assertEqual(changes[5 * frame.COLS + 1], 550499)
@@ -80,12 +80,12 @@ class TestFrame(unittest.TestCase):
         # changes should not have been flushed, frame should be stale
         self.assertTrue(frame.isStale())
         changes = frame.getChanges()
-        self.assertEquals(len(changes), 4)
+        self.assertEqual(len(changes), 4)
 
         # changes should now be empty and thus not be stale
         self.assertFalse(frame.isStale())
         changes = frame.getChanges()
-        self.assertEquals(len(changes), 0)
+        self.assertEqual(len(changes), 0)
 
     # priavte methods/attributes should not be tested to keep encapsulation
 
@@ -209,16 +209,16 @@ class TestFrameStack(unittest.TestCase):
 
         map = fs.getMap()
 
-        self.assertEquals(map[0], 1)
-        self.assertEquals(map[1], 2)
-        self.assertEquals(map[2], 3)
+        self.assertEqual(map[0], 1)
+        self.assertEqual(map[1], 2)
+        self.assertEqual(map[2], 3)
 
         changes = fs.getChanges()
 
-        self.assertEquals(len(changes), 3)
-        self.assertEquals(changes[0], 1)
-        self.assertEquals(changes[1], 2)
-        self.assertEquals(changes[2], 3)
+        self.assertEqual(len(changes), 3)
+        self.assertEqual(changes[0], 1)
+        self.assertEqual(changes[1], 2)
+        self.assertEqual(changes[2], 3)
 
     def test_isStale(self):
         """Test that frameStack is stale if one component is stale"""

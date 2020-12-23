@@ -26,7 +26,7 @@ jobs:
         run: pipenv install --dev --pre
       - name: Run Tests and Generate Coverate Report
         run: |
-          pipenv run coverage run --branch -m unittest discover
+          pipenv run coverage run -m unittest discover
           pipenv run coverage xml
       - name: Uplad coverage to Codecov
         uses: codecov/codecov-action@v1

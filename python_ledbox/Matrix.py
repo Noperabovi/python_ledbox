@@ -3,7 +3,7 @@ from typing import Final, Dict
 from python_ledbox.Frames import Frame, FrameStack
 
 
-class AbstractMatrix(ABC):
+class Matrix(ABC):
     def __init__(self, rows: int, cols: int):
         self.ROWS: Final[int] = rows
         self.COLS: Final[int] = cols

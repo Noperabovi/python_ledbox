@@ -4,13 +4,10 @@ from typing import Tuple
 class Color:
     """Provides functionality for creating and managing colors."""
 
-    _value: int = 0
-
-    # setter
     @staticmethod
-    def set_rgb(red: int, green: int, blue: int) -> None:
+    def from_rgb(red: int, green: int, blue: int) -> None:
         """Set color-value based on rgb input."""
-        Color._value = (red << 16) | (green << 8) | blue
+        return (red << 16) | (green << 8) | blue
 
     # @staticmethod
     # def set_hsv(hue: int, saturation: int, value: int) -> None:
@@ -27,14 +24,13 @@ class Color:
     #     """Set color-value based on hex-string input."""
     #     pass
 
-    # getter
     @staticmethod
-    def get_rgb() -> Tuple[int]:
+    def to_rgb(color: int) -> Tuple[int]:
         """Get rgb color-value."""
         return (
-            Color._value >> 16 & 0xFF,
-            Color._value >> 8 & 0xFF,
-            Color._value & 0xFF,
+            color >> 16 & 0xFF,
+            color >> 8 & 0xFF,
+            color & 0xFF,
         )
 
     # @staticmethod

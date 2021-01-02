@@ -28,18 +28,18 @@ class Frame(FrameComponent):
 
         return row * self.COLS + col
 
-    def setColor(self, row: int, col: int, color: int) -> None:
-        """Set color of given cell."""
+    def __setitem__(self, coords, color):
+        """Set color of a given cell."""
 
-        index = self.__getIndex(row, col)
+        index = self.__getIndex(coords[0], coords[1])
 
         self.__map[index] = color
         self.__changes[index] = color
 
-    def getColor(self, row: int, col: int) -> int:
+    def __getitem__(self, coords) -> int:
         """Return color of given cell."""
 
-        index = self.__getIndex(row, col)
+        index = self.__getIndex(coords[0], coords[1])
         return self.__map.get(index)
 
     def getMap(self) -> Dict[int, int]:

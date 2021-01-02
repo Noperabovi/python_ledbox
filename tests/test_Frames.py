@@ -10,10 +10,10 @@ def setupFrame(colors):
 
     frame = Frames.Frame(10, 7)
 
-    frame.setColor(0, 0, colors[0])
-    frame.setColor(5, 1, colors[1])
-    frame.setColor(9, 6, colors[2])
-    frame.setColor(3, 5, colors[3])
+    frame[0, 0] = colors[0]
+    frame[5, 1] = colors[1]
+    frame[9, 6] = colors[2]
+    frame[3, 5] = colors[3]
 
     return frame
 
@@ -35,19 +35,19 @@ class TestFrame(unittest.TestCase):
 
         frame = Frames.Frame(10, 7)
 
-        # setColor()
-        frame.setColor(0, 0, self.testColors[0])
-        frame.setColor(5, 1, self.testColors[1])
-        frame.setColor(9, 6, self.testColors[2])
+        # __setitem__
+        frame[0, 0] = self.testColors[0]
+        frame[5, 1] = self.testColors[1]
+        frame[9, 6] = self.testColors[2]
         # should be able to handle None (transparent)
-        frame.setColor(3, 5, self.testColors[3])
+        frame[3, 5] = self.testColors[3]
 
-        # getColor()
-        self.assertEqual(frame.getColor(0, 0), self.testColors[0])
-        self.assertEqual(frame.getColor(5, 1), self.testColors[1])
-        self.assertEqual(frame.getColor(9, 6), self.testColors[2])
+        # __getitem__
+        self.assertEqual(frame[0, 0], self.testColors[0])
+        self.assertEqual(frame[5, 1], self.testColors[1])
+        self.assertEqual(frame[9, 6], self.testColors[2])
         # should be able to handle None (transparent)
-        self.assertEqual(frame.getColor(3, 5), self.testColors[3])
+        self.assertEqual(frame[3, 5], self.testColors[3])
 
     def test_getMap(self):
         """Test that getMap() method returns color array."""
@@ -197,15 +197,15 @@ class TestFrameStack(unittest.TestCase):
         frame3 = sub_fs.get(1)
 
         # draw on frames
-        frame1.setColor(0, 0, 1)
-        frame1.setColor(0, 1, None)
-        frame1.setColor(0, 2, None)
-        frame2.setColor(0, 0, 2)
-        frame2.setColor(0, 1, 2)
-        frame2.setColor(0, 2, None)
-        frame3.setColor(0, 0, 3)
-        frame3.setColor(0, 1, 3)
-        frame3.setColor(0, 2, 3)
+        frame1[0, 0] = 1
+        frame1[0, 1] = None
+        frame1[0, 2] = None
+        frame2[0, 0] = 2
+        frame2[0, 1] = 2
+        frame2[0, 2] = None
+        frame3[0, 0] = 3
+        frame3[0, 1] = 3
+        frame3[0, 2] = 3
 
         map = fs.getMap()
 
@@ -230,6 +230,6 @@ class TestFrameStack(unittest.TestCase):
 
         # draw on frame
         frame2 = fs.get(1).get(0)
-        frame2.setColor(0,0,1000)
+        frame2[0, 0] = 1000
 
         self.assertTrue(fs.isStale())

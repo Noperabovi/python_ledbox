@@ -8,6 +8,7 @@ coverage = "*"
 black = "*"
 
 [packages]
+sty = "*"
 
 [requires]
 python_version = "3.9"

@@ -15,6 +15,5 @@ class TestColor(unittest.TestCase):
         ]
 
         for c in test_colors:
-            Color.set_rgb(*c["input"])
-            self.assertEqual(Color._value, c["value"])
-            self.assertEqual(Color.get_rgb(), c["input"])
+            intColor = Color.from_rgb(*c["input"])
+            self.assertEqual(Color.to_rgb(intColor), c["input"])

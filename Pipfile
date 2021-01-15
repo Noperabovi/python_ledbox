@@ -9,6 +9,7 @@ black = "*"
 
 [packages]
 sty = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.9"

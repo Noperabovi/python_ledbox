@@ -5,7 +5,7 @@ class Color:
     """Provides functionality for creating and managing colors."""
 
     @staticmethod
-    def from_rgb(red: int, green: int, blue: int) -> None:
+    def from_rgb(red: int, green: int, blue: int) -> int:
         """Set color-value based on rgb input."""
         return (red << 16) | (green << 8) | blue
 

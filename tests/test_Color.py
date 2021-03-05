@@ -1,6 +1,6 @@
 import unittest
 
-from python_ledbox.Color import Color
+from python_ledbox import Color
 
 
 class TestColor(unittest.TestCase):

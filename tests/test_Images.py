@@ -2,7 +2,7 @@ import unittest
 
 from python_ledbox.Images import ImageLoader, Image
 from python_ledbox.Frames import Frame
-from python_ledbox.Color import Color
+from python_ledbox import Color
 
 BASE_PATH = "./tests/files/"
 
@@ -41,7 +41,7 @@ class TestImageLoader(unittest.TestCase):
             self.imageLoader.load(f"{BASE_PATH}imagedir/testpic.png")
 
         self.assertEqual(
-            "Image with filename already loaded.", context.exception.__str__()
+            'Image with filename "testpic" already loaded.', context.exception.__str__()
         )
 
     def test_load_image_name_already_used_overwrite(self):
@@ -65,16 +65,16 @@ class TestImageLoader(unittest.TestCase):
         """Test that using not supported image type raises exception."""
 
         with self.assertRaises(ValueError) as context:
-            self.imageLoader.load("filewithnoextension")
+            self.imageLoader.load("fileWithNoExtension")
 
         self.assertEqual(
-            "Image file format not supported.", context.exception.__str__()
+            'Image file format "" not supported.', context.exception.__str__()
         )
 
         with self.assertRaises(ValueError) as context:
-            self.imageLoader.load("filewithin")
+            self.imageLoader.load("filewithinvalidExtension.ypg")
         self.assertEqual(
-            "Image file format not supported.", context.exception.__str__()
+            'Image file format ".ypg" not supported.', context.exception.__str__()
         )
 
 

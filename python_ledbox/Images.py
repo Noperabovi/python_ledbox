@@ -5,7 +5,7 @@ from PIL import Image as PillowImage
 from PIL.Image import Image as PillowImageObject
 
 from python_ledbox.Frames import Frame
-from python_ledbox.Color import Color
+from python_ledbox import Color
 
 
 class ImageLoader:
@@ -26,11 +26,13 @@ class ImageLoader:
 
             # check if name already exists, ignore if overwrite = True
             if imageName in self.__images.keys() and not overwrite:
-                raise ValueError("Image with filename already loaded.")
+                raise ValueError(f'Image with filename "{imageName}" already loaded.')
 
             # check if file has right format
             if os.path.splitext(filePath)[1].lower() not in ImageLoader.__validImages:
-                raise ValueError("Image file format not supported.")
+                raise ValueError(
+                    f'Image file format "{os.path.splitext(filePath)[1].lower().lower()}" not supported.'
+                )
 
             # load image from file and create Image object in RGBA format
             self.__images[imageName] = Image(

@@ -3,7 +3,7 @@ from typing import Dict
 from sty import bg, rs
 
 from python_ledbox.Matrix import Matrix
-from python_ledbox.Color import Color
+from python_ledbox import Color
 
 
 class TerminalMatrix(Matrix):
@@ -11,6 +11,7 @@ class TerminalMatrix(Matrix):
         super().__init__(rows, cols)
 
         self.__colorList: int = [None] * rows * cols
+        print("\n" * (rows))  # create enough space below prompt
 
     def applyChanges(self, changes: Dict[int, int]) -> None:
         """Apply given changes to the matrix."""
@@ -34,6 +35,7 @@ class TerminalMatrix(Matrix):
     def __printMatrix(self):
 
         i = 0
+        print("\033[F" * (self.ROWS + 1))
 
         for row in range(self.ROWS):
             line = ""
@@ -52,4 +54,3 @@ class TerminalMatrix(Matrix):
             print(line)
 
         # jump back to start
-        print("\033[F" * (self.ROWS + 1))

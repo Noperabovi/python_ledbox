@@ -5,7 +5,7 @@ from sty import bg, rs
 
 from python_ledbox.Frames import Frame
 from python_ledbox.TerminalMatrix import TerminalMatrix
-from python_ledbox.Color import Color
+from python_ledbox import Color
 
 
 def get_frame():
@@ -40,13 +40,15 @@ class TestTerminalMatrix(unittest.TestCase):
         frame = get_frame()
 
         # expected print calls
-        calls = [None] * 6
-        calls[0] = call(bg(255, 255, 255) + "  " + rs.bg + bg(255, 0, 0) + "  " + rs.bg)
-        calls[1] = call(bg(0, 255, 0) + "  " + rs.bg + bg(0, 0, 255) + "  " + rs.bg)
-        calls[2] = call("\033[F" * (matrix.ROWS + 1))
-        calls[3] = call(bg(255, 0, 255) + "  " + rs.bg + bg(255, 0, 0) + "  " + rs.bg)
-        calls[4] = call("  " + bg(0, 0, 255) + "  " + rs.bg)
-        calls[5] = calls[2]
+        calls = [None] * 7
+
+        calls[0] = call("\n\n")
+        calls[1] = call("\033[F" * (matrix.ROWS + 1))
+        calls[2] = call(bg(255, 255, 255) + "  " + rs.bg + bg(255, 0, 0) + "  " + rs.bg)
+        calls[3] = call(bg(0, 255, 0) + "  " + rs.bg + bg(0, 0, 255) + "  " + rs.bg)
+        calls[4] = calls[1]
+        calls[5] = call(bg(255, 0, 255) + "  " + rs.bg + bg(255, 0, 0) + "  " + rs.bg)
+        calls[6] = call("  " + bg(0, 0, 255) + "  " + rs.bg)
 
         # apply original map
         matrix.applyMap(frame.getMap())
@@ -57,8 +59,8 @@ class TestTerminalMatrix(unittest.TestCase):
 
         matrix.applyMap(frame.getMap())
 
-        # 6 lines should be written
-        self.assertEqual(len(mock_print.call_args_list), 6)
+        # 7 lines should be written
+        self.assertEqual(len(mock_print.call_args_list), 7)
 
         for index, value in enumerate(mock_print.call_args_list):
             self.assertEqual(value, calls[index])
@@ -78,14 +80,14 @@ class TestTerminalMatrix(unittest.TestCase):
 
         # expected output
         calls = [None] * 3
-        calls[0] = call(bg(255, 0, 255) + "  " + rs.bg + bg(255, 0, 0) + "  " + rs.bg)
-        calls[1] = call("  " + bg(0, 0, 255) + "  " + rs.bg)
-        calls[2] = call("\033[F" * (matrix.ROWS + 1))
+        calls[0] = call("\033[F" * (matrix.ROWS + 1))
+        calls[1] = call(bg(255, 0, 255) + "  " + rs.bg + bg(255, 0, 0) + "  " + rs.bg)
+        calls[2] = call("  " + bg(0, 0, 255) + "  " + rs.bg)
 
         call_args = mock_print.call_args_list
 
-        # 6 lines should be written (3 from rendered map)
-        self.assertEqual(len(call_args), 6)
+        # 7 lines should be written (3 from rendered map)
+        self.assertEqual(len(call_args), 7)
 
-        for i in range(3, 6):
-            self.assertEqual(call_args[i], calls[i - 3])
+        for i in range(4, 7):
+            self.assertEqual(call_args[i], calls[i - 4])

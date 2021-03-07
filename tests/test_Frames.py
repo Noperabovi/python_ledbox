@@ -1,3 +1,4 @@
+from tests.test_PiMatrix import get_frame
 import unittest
 from unittest.result import failfast
 
@@ -86,6 +87,16 @@ class TestFrame(unittest.TestCase):
         self.assertFalse(frame.isStale())
         changes = frame.getChanges()
         self.assertEqual(len(changes), 0)
+
+    def test_clearChanges(self):
+        """Test that no changes are returned after clearChanges() has ben called."""
+
+        f = get_frame()
+
+        f.clearChanges()
+
+        self.assertEqual(0, len(f.getChanges()))
+        self.assertFalse(f.isStale())
 
     # priavte methods/attributes should not be tested to keep encapsulation
 
@@ -233,3 +244,22 @@ class TestFrameStack(unittest.TestCase):
         frame2[0, 0] = 1000
 
         self.assertTrue(fs.isStale())
+
+    def test_clearChanges(self):
+        """Test that no changes are returned after clearChanges() has ben called."""
+
+        fs = setupTestComponent()
+
+        frame1 = fs.get(0)
+        sub_fs = fs.get(1)
+        frame2 = sub_fs.get(0)
+        frame3 = sub_fs.get(1)
+
+        frame1[0, 0] = 1
+        frame2[0, 0] = 2
+        frame3[1, 1] = 3
+
+        fs.clearChanges()
+
+        self.assertEqual(0, len(fs.getChanges()))
+        self.assertFalse(fs.isStale())

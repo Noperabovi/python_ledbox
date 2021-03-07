@@ -45,7 +45,8 @@ class TestPiMatrix(unittest.TestCase):
 
     @patch("python_ledbox.PiMatrix.PixelStrip.show")
     @patch("python_ledbox.PiMatrix.PixelStrip.setPixelColor")
-    def test_apply_map(self, mock_setPixelColor, mock_show):
+    @patch("python_ledbox.PiMatrix.PixelStrip.begin")
+    def test_apply_map(self, mock_begin, mock_setPixelColor, mock_show):
         # def test_apply_map(self):
         """Test that the applyMap() method calls setPixelColor method for every pixel on frame."""
 
@@ -85,7 +86,8 @@ class TestPiMatrix(unittest.TestCase):
 
     @patch("python_ledbox.PiMatrix.PixelStrip.show")
     @patch("python_ledbox.PiMatrix.PixelStrip.setPixelColor")
-    def test_apply_changes(self, mock_setPixelColor, mock_show):
+    @patch("python_ledbox.PiMatrix.PixelStrip.begin")
+    def test_apply_changes(self, mock_begin, mock_setPixelColor, mock_show):
         """Test that the applyChanges() method calls setPixelColor method for every pixel on frame."""
 
         matrix = get_renderedMatrix()
@@ -115,7 +117,8 @@ class TestPiMatrix(unittest.TestCase):
 
     @patch("python_ledbox.PiMatrix.PixelStrip.show")
     @patch("python_ledbox.PiMatrix.PixelStrip.setPixelColor")
-    def test_clear_matrix(self, mock_setPixelColor, mock_show):
+    @patch("python_ledbox.PiMatrix.PixelStrip.begin")
+    def test_clear_matrix(self, mock_begin, mock_setPixelColor, mock_show):
         """Test that all pixels are turned off when calling clear method."""
 
         matrix = get_renderedMatrix()

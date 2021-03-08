@@ -1,10 +1,14 @@
 import unittest
 from unittest.mock import patch, call
 
+from rpi_ws281x.rpi_ws281x import PixelStrip
+
 from python_ledbox.Frames import Frame
 from python_ledbox.Matrix import Matrix
 from python_ledbox import PiMatrix
 from python_ledbox import Color
+
+# TODO add PixelStrip mocks to prevent segmentation fault error
 
 
 def get_frame():
@@ -43,15 +47,17 @@ class TestPiMatrix(unittest.TestCase):
         self.assertEqual(4, args[0])
         self.assertEqual(18, args[1])
 
-    @patch("python_ledbox.PiMatrix.PixelStrip.show")
-    @patch("python_ledbox.PiMatrix.PixelStrip.setPixelColor")
-    @patch("python_ledbox.PiMatrix.PixelStrip.begin")
-    def test_apply_map(self, mock_begin, mock_setPixelColor, mock_show):
+    @patch("python_ledbox.PiMatrix.PixelStrip")
+    def test_apply_map(
+        self, mock_PixelStrip
+    ):
         # def test_apply_map(self):
         """Test that the applyMap() method calls setPixelColor method for every pixel on frame."""
 
         matrix = PiMatrix.PiMatrix(2, 2, 18)
         frame = get_frame()
+
+        pixelStrip = matrix._PiMatrix__pixelStrip
 
         # expected print calls
         calls = [None] * 8
@@ -77,21 +83,21 @@ class TestPiMatrix(unittest.TestCase):
         matrix.applyMap(frame.getMap())
 
         # setPixelColor should be called 8 times (4 initial + 4 after changes)
-        self.assertEqual(len(mock_setPixelColor.call_args_list), 8)
+        self.assertEqual(len(pixelStrip.setPixelColor.call_args_list), 8)
 
-        for index, value in enumerate(mock_setPixelColor.call_args_list):
+        for index, value in enumerate(pixelStrip.setPixelColor.call_args_list):
             self.assertEqual(value, calls[index])
 
-        self.assertEqual(2, len(mock_show.call_args_list))
+        self.assertEqual(2, len(pixelStrip.show.call_args_list))
 
-    @patch("python_ledbox.PiMatrix.PixelStrip.show")
-    @patch("python_ledbox.PiMatrix.PixelStrip.setPixelColor")
-    @patch("python_ledbox.PiMatrix.PixelStrip.begin")
-    def test_apply_changes(self, mock_begin, mock_setPixelColor, mock_show):
+    @patch("python_ledbox.PiMatrix.PixelStrip")
+    def test_apply_changes(self, mock_pixelStrip):
         """Test that the applyChanges() method calls setPixelColor method for every pixel on frame."""
 
         matrix = get_renderedMatrix()
         frame = get_frame()
+
+        pixelStrip = matrix._PiMatrix__pixelStrip
 
         frame.clearChanges()
         frame[0, 0] = Color.from_rgb(255, 0, 255)
@@ -105,7 +111,7 @@ class TestPiMatrix(unittest.TestCase):
         calls[0] = call(0, Color.from_rgb(255, 0, 255))
         calls[1] = call(2, Color.from_rgb(0, 0, 0))
 
-        call_args = mock_setPixelColor.call_args_list
+        call_args = pixelStrip.setPixelColor.call_args_list
 
         # 6 lines should be written (4 from rendered map)
         self.assertEqual(len(call_args), 6)
@@ -113,18 +119,35 @@ class TestPiMatrix(unittest.TestCase):
         for i in range(4, 6):
             self.assertEqual(call_args[i], calls[i - 4])
 
-        self.assertEqual(2, len(mock_show.call_args_list))
+        self.assertEqual(2, len(pixelStrip.show.call_args_list))
 
-    @patch("python_ledbox.PiMatrix.PixelStrip.show")
-    @patch("python_ledbox.PiMatrix.PixelStrip.setPixelColor")
-    @patch("python_ledbox.PiMatrix.PixelStrip.begin")
-    def test_clear_matrix(self, mock_begin, mock_setPixelColor, mock_show):
+    @patch("python_ledbox.PiMatrix.PixelStrip", autospec=True)
+    def test_clear_matrix(self, mock_PixelStrip):
         """Test that all pixels are turned off when calling clear method."""
 
         matrix = get_renderedMatrix()
         matrix.clear()
 
-        for i in range(4):
-            self.assertEqual(mock_setPixelColor.call_args_list[i + 4], call(i, 0))
+        pixelStrip = matrix._PiMatrix__pixelStrip
 
-        self.assertEqual(2, len(mock_show.call_args_list))
+        for i in range(4):
+            self.assertEqual(pixelStrip.setPixelColor.call_args_list[i + 4], call(i, 0))
+
+        self.assertEqual(2, len(pixelStrip.show.call_args_list))
+
+    @patch("python_ledbox.PiMatrix.PixelStrip", autospec=True)
+    def test_clear_matrix(self, mock_PixelStrip):
+        """Test that all pixels are turned off when calling clear method."""
+
+        matrix = get_renderedMatrix()
+        matrix.clear()
+
+        pixelStrip = matrix._PiMatrix__pixelStrip
+
+        for i in range(4):
+            self.assertEqual(
+                pixelStrip.setPixelColor.call_args_list[i + 4],
+                call(i, 0),
+            )
+
+        self.assertEqual(2, len(pixelStrip.show.call_args_list))

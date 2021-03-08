@@ -12,8 +12,12 @@ class FrameComponent(ABC):
         """Returns entire map of color-values from the component."""
 
     @abstractmethod
-    def getChanges(self, flush=True) -> List[Tuple[int]]:
+    def getChanges(self, clear=True) -> List[Tuple[int]]:
         """Returns the changes made to the component since last read access."""
+
+    @abstractmethod
+    def clearChanges(self) -> None:
+        """Clear current from change list (does not affect frame)."""
 
 
 class Frame(FrameComponent):
@@ -56,6 +60,9 @@ class Frame(FrameComponent):
     def isStale(self) -> bool:
         return len(self.__changes) != 0
 
+    def clearChanges(self) -> None:
+        self.__changes = {}
+
 
 class FrameStack(FrameComponent):
     def __init__(self, rows: int, cols: int):
@@ -94,7 +101,7 @@ class FrameStack(FrameComponent):
 
         return map
 
-    def getChanges(self, flush=True) -> Dict[int, int]:
+    def getChanges(self, clear=True) -> Dict[int, int]:
         """Get all changes from the FrameStack, lower index is on top."""
 
         changes = {}
@@ -102,7 +109,7 @@ class FrameStack(FrameComponent):
         # go through each component
         for component in self.__components:
             # get changes of each component
-            componentChanges = component.getChanges(flush)
+            componentChanges = component.getChanges(clear)
             # store changes if change for index does not already exist
             for index, color in componentChanges.items():
                 if index not in changes and color != None:
@@ -118,3 +125,7 @@ class FrameStack(FrameComponent):
                 return True
 
         return False
+
+    def clearChanges(self) -> None:
+        for component in self.__components:
+            component.clearChanges()

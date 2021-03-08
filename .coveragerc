@@ -4,5 +4,6 @@
 omit =
         *__init__*
         *tests*
+        *site-packages*
         
 branch = True

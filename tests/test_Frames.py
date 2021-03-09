@@ -1,4 +1,3 @@
-from tests.test_PiMatrix import get_frame
 import unittest
 from unittest.result import failfast
 
@@ -91,7 +90,7 @@ class TestFrame(unittest.TestCase):
     def test_clearChanges(self):
         """Test that no changes are returned after clearChanges() has ben called."""
 
-        f = get_frame()
+        f = setupFrame(self.testColors)
 
         f.clearChanges()
 
@@ -109,6 +108,17 @@ class TestFrame(unittest.TestCase):
     #     self.assertEqual(frame._getIndex(5, 1), 36)
     #     self.assertEqual(frame._getIndex(9, 6), 69)
     #     self.assertEqual(frame._getIndex(3, 5), 26)
+
+    def test_no_changes_on_idempotent_operation(self):
+        """Test that changes are not documented when cell is set to same color as before."""
+
+        f = setupFrame(self.testColors)
+        f.clearChanges()
+
+        # same as initial color
+        f[0, 0] = self.testColors[0]
+
+        self.assertEqual(0, len(f.getChanges()))
 
 
 def setupTestComponent():

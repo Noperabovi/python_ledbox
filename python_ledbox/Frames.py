@@ -37,8 +37,9 @@ class Frame(FrameComponent):
 
         index = self.__getIndex(coords[0], coords[1])
 
-        self.__map[index] = color
-        self.__changes[index] = color
+        if self.__map.get(index, -1) != color:
+            self.__map[index] = color
+            self.__changes[index] = color
 
     def __getitem__(self, coords) -> int:
         """Return color of given cell."""

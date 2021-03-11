@@ -13,7 +13,9 @@ from python_ledbox.Matrix import Matrix
 
 class ClockApp(App):
     def __init__(self, matrix: Matrix, frame: Frame):
-        super().__init__(matrix)
+        super().__init__()
+
+        self.matrix = matrix
         self.__frame = frame
         self.__imageLoader = ImageLoader()
         self.__imageLoader.load("python_ledbox/images/numerals/")
@@ -28,9 +30,10 @@ class ClockApp(App):
         self.minute_first_digit_color: int = Color.red
         self.minute_second_digit_color: int = Color.red
 
-        self.__isInitialised = True  # no initialization necessary
+        self._isInitialised = True  # no initialization necessary
 
     def __updateTime(self, time: datetime) -> None:
+
         hour_first_digit = self.__imageLoader.get(str(time.hour // 10))
         hour_second_digit = self.__imageLoader.get(str(time.hour % 10))
         minute_first_digit = self.__imageLoader.get(str(time.minute // 10))

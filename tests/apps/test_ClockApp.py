@@ -56,6 +56,8 @@ class TestClockApp(unittest.TestCase):
 
         matrix.applyChanges.assert_called_once_with(frame.getChanges())
 
+        app.stop()
+
     @patch("python_ledbox.apps.ClockApp.time")
     @patch("python_ledbox.apps.ClockApp.datetime")
     @patch("python_ledbox.apps.ClockApp.Matrix")
@@ -93,6 +95,8 @@ class TestClockApp(unittest.TestCase):
         self.assertEqual(4, len(mock_Image.applyToFrame.call_args_list))
 
         matrix.applyChanges.assert_called_once_with(frame.getChanges())
+
+        app.stop()
 
     @patch("python_ledbox.apps.ClockApp.time")
     @patch("python_ledbox.apps.ClockApp.datetime")
@@ -137,6 +141,8 @@ class TestClockApp(unittest.TestCase):
             self.assertIn(c, mock_Image.applyToFrame.call_args_list)
 
         matrix.applyChanges.assert_called_once_with(frame.getChanges())
+
+        app.stop()
 
     @patch("python_ledbox.apps.ClockApp.time")
     @patch("python_ledbox.apps.ClockApp.datetime")
@@ -184,3 +190,5 @@ class TestClockApp(unittest.TestCase):
             self.assertIn(c, mock_Image.applyToFrame.call_args_list)
 
         matrix.applyChanges.assert_called_once_with(frame.getChanges())
+
+        app.stop()

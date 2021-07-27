@@ -11,6 +11,7 @@ black = "*"
 sty = "*"
 pillow = "*"
 rpi-ws281x = "*"
+pi-clap = "*"
 
 [requires]
 python_version = "3.9"

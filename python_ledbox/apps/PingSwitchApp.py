@@ -24,7 +24,7 @@ class PingSwitchApp(App):
         self.__online_since: int = None
         self.__offline_since: int = None
 
-    def __ping(self, host: str):
+    def ping(host: str):
         """
         Returns True if host (str) responds to a ping request.
         Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
@@ -41,8 +41,8 @@ class PingSwitchApp(App):
 
     def __updateStatus(self, now: datetime) -> None:
 
-        pingSuccessful = self.__ping(self.ipAddress)
-        print(pingSuccessful)
+        pingSuccessful = self.ping(self.ipAddress)
+        # print(pingSuccessful)
 
         # first uncessful ping
         if self.__appsRunning and not pingSuccessful:

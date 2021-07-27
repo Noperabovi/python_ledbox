@@ -63,6 +63,56 @@ class TestClockApp(unittest.TestCase):
     @patch("python_ledbox.apps.ClockApp.Matrix")
     @patch("python_ledbox.apps.ClockApp.ImageLoader")
     @patch("python_ledbox.apps.ClockApp.Image")
+    def test_clock_applies_whole_map(
+        self, Mock_Image, Mock_ImageLoader, mock_matrix, mock_dt, mock_time
+    ):
+        """Test that app displays the current time."""
+
+        mock_dt.now = Mock(return_value=datetime(2000, 1, 1, 13, 54))
+        mock_dt.hour = Mock(return_value=13)
+        mock_dt.minute = Mock(return_value=54)
+
+        # forces thread to be switched
+        mock_time.sleep = Mock(side_effect=lambda x: time.sleep(0.01))
+
+        mock_ImageLoader = Mock_ImageLoader()
+        mock_Image = Mock_Image()
+        mock_ImageLoader.get = Mock(return_value=mock_Image)
+        mock_Image.applyToFrame = Mock(return_value="Image")
+
+        # create app and start
+        frame = Frame(10, 10)
+        matrix = mock_matrix()
+        app = ClockApp(matrix, frame)
+        app.start()
+
+        # get digits from ImageLoader
+        digits = ["1", "3", "5", "4"]
+
+        for digit in digits:
+            c = call(digit)
+            self.assertIn(c, mock_ImageLoader.get.call_args_list)
+
+        # printed images
+        calls = [None] * 4
+        recolor = {0: 16711680}
+        calls[0] = call(frame, 0, 0, recolor)
+        calls[1] = call(frame, 0, 7, recolor)
+        calls[2] = call(frame, 5, 0, recolor)
+        calls[3] = call(frame, 5, 7, recolor)
+
+        for c in calls:
+            self.assertIn(c, mock_Image.applyToFrame.call_args_list)
+
+        matrix.applyChanges.assert_called_once_with(frame.getChanges())
+
+        app.stop()
+
+    @patch("python_ledbox.apps.ClockApp.time")
+    @patch("python_ledbox.apps.ClockApp.datetime")
+    @patch("python_ledbox.apps.ClockApp.Matrix")
+    @patch("python_ledbox.apps.ClockApp.ImageLoader")
+    @patch("python_ledbox.apps.ClockApp.Image")
     def test_stop_stops_updating_time(
         self, Mock_Image, Mock_ImageLoader, mock_matrix, mock_dt, mock_time
     ):
@@ -82,6 +132,7 @@ class TestClockApp(unittest.TestCase):
         frame = Frame(10, 10)
         matrix = mock_matrix()
         app = ClockApp(matrix, frame)
+        app.applyMapOnChange = True
         app.start()
 
         app.stop()
@@ -94,7 +145,7 @@ class TestClockApp(unittest.TestCase):
         self.assertNotIn(call("0"), mock_ImageLoader.get.call_args_list)
         self.assertEqual(4, len(mock_Image.applyToFrame.call_args_list))
 
-        matrix.applyChanges.assert_called_once_with(frame.getChanges())
+        matrix.applyMap.assert_called_once_with(frame.getMap())
 
         app.stop()
 

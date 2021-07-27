@@ -30,6 +30,8 @@ class ClockApp(App):
         self.minute_first_digit_color: int = Color.red
         self.minute_second_digit_color: int = Color.red
 
+        self.applyMapOnChange: bool = False
+
         self._isInitialised = True  # no initialization necessary
 
     def __updateTime(self, time: datetime) -> None:
@@ -67,7 +69,10 @@ class ClockApp(App):
             {0: self.minute_second_digit_color},
         )
 
-        self.matrix.applyChanges(self.__frame.getChanges())
+        if self.applyMapOnChange:
+            self.matrix.applyMap(self.__frame.getChanges())
+        else:
+            self.matrix.applyChanges(self.__frame.getMap())
 
     def __timeLoop(self) -> None:
 

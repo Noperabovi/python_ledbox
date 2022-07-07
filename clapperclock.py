@@ -43,15 +43,15 @@ class CustomListener(Listener):
 
         self.clockApp = ClockApp(self.piMatrix, self.frame)
 
-        # self.clockApp.hour_first_digit_color = Color.from_rgb(25, 0, 0)
-        # self.clockApp.hour_second_digit_color = Color.from_rgb(25, 0, 5)
-        # self.clockApp.minute_first_digit_color = Color.from_rgb(25, 0, 5)
-        # self.clockApp.minute_second_digit_color = Color.from_rgb(25, 0, 0)
+        self.clockApp.hour_first_digit_color = Color.from_rgb(25, 0, 0)
+        self.clockApp.hour_second_digit_color = Color.from_rgb(25, 0, 5)
+        self.clockApp.minute_first_digit_color = Color.from_rgb(25, 0, 5)
+        self.clockApp.minute_second_digit_color = Color.from_rgb(25, 0, 0)
 
-        self.clockApp.hour_first_digit_color = Color.from_rgb(255, 0, 0)
-        self.clockApp.hour_second_digit_color = Color.from_rgb(255, 0, 5)
-        self.clockApp.minute_first_digit_color = Color.from_rgb(255, 0, 5)
-        self.clockApp.minute_second_digit_color = Color.from_rgb(255, 0, 0)
+        # self.clockApp.hour_first_digit_color = Color.from_rgb(255, 0, 0)
+        # self.clockApp.hour_second_digit_color = Color.from_rgb(255, 0, 5)
+        # self.clockApp.minute_first_digit_color = Color.from_rgb(255, 0, 5)
+        # self.clockApp.minute_second_digit_color = Color.from_rgb(255, 0, 0)
 
 
         self.clockApp.hour_first_digit_pos = (0, 1)
@@ -88,16 +88,16 @@ class CustomListener(Listener):
             hour = datetime.now().hour
             isActiveHour = hour >= 22 or hour <= 8
 
-            if True: # not self.pcOnline and not self.phoneOnline and isActiveHour:
-                self.clockApp.start()
-                time.sleep(5)
-                self.clockApp.stop()
-                self.piMatrix.clear()
-                logText = logText + "CLOCK ACTIVATED FOR 5 SECONDS  "
-            else:
-                logText = logText + f"ACTIVE_HOUR: {isActiveHour}  "
-                logText = logText + f"PC_ONLINE: {self.pcOnline}  "
-                logText = logText + f"PHONE_ONLINE: {self.phoneOnline}  "
+            # if not self.pcOnline and not self.phoneOnline and isActiveHour:
+            #     self.clockApp.start()
+            #     time.sleep(5)
+            #     self.clockApp.stop()
+            #     self.piMatrix.clear()
+            #     logText = logText + "CLOCK ACTIVATED FOR 5 SECONDS  "
+            # else:
+            #     logText = logText + f"ACTIVE_HOUR: {isActiveHour}  "
+            #     logText = logText + f"PC_ONLINE: {self.pcOnline}  "
+            #     logText = logText + f"PHONE_ONLINE: {self.phoneOnline}  "
 
             logging.info(logText)
 

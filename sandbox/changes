@@ -1,0 +1,2 @@
+add matrix implementation for raspberry pi
+ - add rpi-ws281x as dependency

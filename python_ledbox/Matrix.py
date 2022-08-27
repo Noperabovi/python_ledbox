@@ -16,6 +16,10 @@ class Matrix(ABC):
     def applyMap(self, map: Dict[int, int]) -> None:
         """Apply entire frame-map to the matrix."""
 
+    @abstractmethod
+    def clear(self) -> None:
+        """Clear entire matrix (turn off pixels)."""
+
     def createFrame(self) -> Frame:
         """Create Frame with same dimensions of matrix."""
         return Frame(self.ROWS, self.COLS)

@@ -5,6 +5,11 @@ import atexit
 import time
 
 
+class MouseEvent(Event):
+    MOUSE_CLICK_LEFT = 1
+    MOUSE_CLICK_RIGHT = 2
+
+
 stop = False
 
 # this seems to be useless
@@ -28,9 +33,9 @@ def startListening():
         middle = status & 0x4
 
         if left:
-            EventManager.dispatch(Event.MOUSE_CLICK_LEFT)
+            EventManager.dispatch(MouseEvent.MOUSE_CLICK_LEFT)
         if right:
-            EventManager.dispatch(Event.MOUSE_CLICK_RIGHT)
+            EventManager.dispatch(MouseEvent.MOUSE_CLICK_RIGHT)
 
     print("listener killed")
 

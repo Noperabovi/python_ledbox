@@ -1,5 +1,13 @@
 from enum import Enum
 from typing import Callable, Dict, Set, Any
+import logging
+
+logging.basicConfig(
+    format="%(levelname)s %(asctime)s     %(message)s",
+    filename="/home/pi/Documents/python_ledbox/fancontrol.log",
+    level=logging.DEBUG,
+    datefmt="%m/%d/%Y %I:%M:%S %p",
+)
 
 
 class Event(Enum):
@@ -17,5 +25,6 @@ class EventManager:
         EventManager.subscribers[event].discard(callback)
 
     def dispatch(event: Event):
+        logging.debug(f"fired {event} event")
         for callback in EventManager.subscribers[event]:
             callback()

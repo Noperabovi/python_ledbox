@@ -9,6 +9,7 @@ from python_ledbox.App import App
 from python_ledbox.Images import ImageLoader, Image
 from python_ledbox.Frames import Frame
 from python_ledbox.Matrix import Matrix
+from python_ledbox.events import Event, EventManager
 
 
 class ClockApp(App):
@@ -30,6 +31,7 @@ class ClockApp(App):
         self.minute_first_digit_color: int = Color.red
         self.minute_second_digit_color: int = Color.red
 
+        EventManager.addListener(Event.MOUSE_CLICK_LEFT, self.__displayTime)
         self._isInitialised = True  # no initialization necessary
 
     def __updateTime(self, time: datetime) -> None:
@@ -67,13 +69,23 @@ class ClockApp(App):
             {0: self.minute_second_digit_color},
         )
 
+        # self.matrix.applyChanges(self.__frame.getChanges())
+
+    def __displayTime(self) -> None:
         self.matrix.applyChanges(self.__frame.getChanges())
+        time.sleep(5)
+        self.matrix.clear()
 
     def __timeLoop(self) -> None:
 
+        minute: int = None
+
         while self.isActive():
-            self.__updateTime(datetime.now())
-            time.sleep(5)
+            now = datetime.now()
+            if now.minute != minute:
+                self.__updateTime(now)
+                minute = now.minute
+            time.sleep(1)
 
     def start(self):
         super().start()

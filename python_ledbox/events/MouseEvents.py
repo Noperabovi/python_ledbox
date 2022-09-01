@@ -1,8 +1,9 @@
 from concurrent.futures import thread
-from Events import Event, EventManager
+from .Events import Event, EventManager
 from threading import Thread
 import atexit
 import time
+
 
 stop = False
 

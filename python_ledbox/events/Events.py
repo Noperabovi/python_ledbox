@@ -1,10 +1,8 @@
 import queue
-from typing import Callable, Dict, Set, Any, Optional, DefaultDict
+from typing import Set, Any, Optional, DefaultDict
 from enum import Enum
 from queue import Queue
 from collections import defaultdict
-from abc import ABC
-
 import logging
 
 # from python_ledbox.events.MouseEvents import MouseEvent
@@ -50,17 +48,3 @@ class EventManager:
         logging.debug(f"fired {event} event")
         for queue in EventManager.subscribers[event]:
             queue.put(Signal(event, message))
-
-
-if __name__ == "__main__":
-    myQueue = Queue()
-    EventManager.addListener(AppEvent.START, myQueue)
-    EventManager.addListener(AppEvent.KILL, myQueue)
-    EventManager.dispatch(AppEvent.START)
-    EventManager.dispatch(AppEvent.START, "start2")
-    EventManager.dispatch(AppEvent.START, {"hour": 8, "minute": 30, "active": True})
-    EventManager.dispatch(AppEvent.KILL, 2234)
-
-    while not myQueue.empty():
-        signal: Signal = myQueue.get()
-        print(f"Event: {signal.event} Message: {signal.message}")

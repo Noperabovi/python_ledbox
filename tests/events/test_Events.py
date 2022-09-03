@@ -1,54 +1,77 @@
 import unittest
 from unittest.mock import Mock, MagicMock
-from typing import Dict, Set, Callable
+from typing import Any, DefaultDict, Set, Callable
+from queue import Queue
+from collections import defaultdict
 
-from python_ledbox.events import Event, EventManager
+from python_ledbox.events import Event, Signal, MouseEvent as ME, EventManager
 
 
 class TestEvents(unittest.TestCase):
     def setUp(self):
-        """Create Mock object for function calls."""
-        self.mock = MagicMock()
+        """Create Mock objects for function calls."""
+        self.queue1 = Mock()
+        self.queue2 = Mock()
 
     def tearDown(self) -> None:
-        EventManager.subscribers: Dict[Event, Set[Callable]] = {
-            event: set() for event in Event
-        }
+        EventManager.subscribers: DefaultDict[Event, Set[Callable]] = defaultdict(
+            lambda: set()
+        )
 
     def test_addListener(self):
-        """Test that adding a listener function adds function to list of listeners."""
+        """Test that adding a listener adds queue to set of listeners."""
 
-        EventManager.addListener(Event.MOUSE_CLICK_LEFT, self.mock.func1)
-        EventManager.addListener(Event.MOUSE_CLICK_LEFT, self.mock.func2)
+        EventManager.addListener(ME.MOUSE_CLICK_LEFT, self.queue1)
+        EventManager.addListener(ME.MOUSE_CLICK_LEFT, self.queue2)
 
-        self.assertIn(self.mock.func1, EventManager.subscribers[Event.MOUSE_CLICK_LEFT])
-        self.assertIn(self.mock.func2, EventManager.subscribers[Event.MOUSE_CLICK_LEFT])
-        self.assertEqual(0, len(EventManager.subscribers[Event.MOUSE_CLICK_RIGHT]))
+        self.assertIn(self.queue1, EventManager.subscribers[ME.MOUSE_CLICK_LEFT])
+        self.assertIn(self.queue2, EventManager.subscribers[ME.MOUSE_CLICK_LEFT])
+        self.assertEqual(0, len(EventManager.subscribers[ME.MOUSE_CLICK_RIGHT]))
 
     def test_removeListener(self):
-        """Test that removing a listener function removes function to list of listeners."""
+        """Test that removing a listener removes queue from set of listeners."""
 
-        EventManager.addListener(Event.MOUSE_CLICK_LEFT, self.mock.func1)
-        EventManager.addListener(Event.MOUSE_CLICK_LEFT, self.mock.func2)
+        EventManager.addListener(ME.MOUSE_CLICK_LEFT, self.queue1)
+        EventManager.addListener(ME.MOUSE_CLICK_LEFT, self.queue2)
 
-        EventManager.removeListener(Event.MOUSE_CLICK_LEFT, self.mock.func1)
+        EventManager.removeListener(ME.MOUSE_CLICK_LEFT, self.queue1)
 
-        self.assertNotIn(
-            self.mock.func1, EventManager.subscribers[Event.MOUSE_CLICK_LEFT]
-        )
-        self.assertEqual(1, len(EventManager.subscribers[Event.MOUSE_CLICK_LEFT]))
+        self.assertNotIn(self.queue1, EventManager.subscribers[ME.MOUSE_CLICK_LEFT])
+        self.assertEqual(1, len(EventManager.subscribers[ME.MOUSE_CLICK_LEFT]))
 
-    def test_dispatch(self):
-        """Test that all functions that subscribed are called once when an envent is fired."""
+    def test_dispatch_called(self):
+        """Test that all listening queues are updated once when an envent is fired."""
 
-        EventManager.addListener(Event.MOUSE_CLICK_LEFT, self.mock.func1)
-        EventManager.addListener(Event.MOUSE_CLICK_LEFT, self.mock.func2)
+        EventManager.addListener(ME.MOUSE_CLICK_LEFT, self.queue1)
+        EventManager.addListener(ME.MOUSE_CLICK_RIGHT, self.queue2)
 
-        EventManager.dispatch(Event.MOUSE_CLICK_LEFT)
-        self.assertEqual(1, self.mock.func1.call_count)
-        self.assertEqual(1, self.mock.func2.call_count)
+        EventManager.dispatch(ME.MOUSE_CLICK_LEFT)
+        self.assertEqual(1, self.queue1.put.call_count)
+        self.assertEqual(0, self.queue2.put.call_count)
 
-        EventManager.dispatch(Event.MOUSE_CLICK_LEFT)
+        EventManager.dispatch(ME.MOUSE_CLICK_RIGHT)
 
-        self.assertEqual(2, self.mock.func1.call_count)
-        self.assertEqual(2, self.mock.func2.call_count)
+        self.assertEqual(1, self.queue1.put.call_count)
+        self.assertEqual(1, self.queue2.put.call_count)
+
+    def test_dispatch_called_with_arguments(self):
+        """Test that all listening queues are updated once when an envent is fired."""
+
+        def getCallArg():
+            return self.queue1.put.call_args.args[0]
+
+        EventManager.addListener(ME.MOUSE_CLICK_LEFT, self.queue1)
+
+        EventManager.dispatch(ME.MOUSE_CLICK_LEFT)
+        event = getCallArg().event
+        message = getCallArg().message
+        self.assertIsInstance(getCallArg(), Signal)
+        self.assertEqual(event, ME.MOUSE_CLICK_LEFT)
+        self.assertEqual(message, None)
+
+        EventManager.dispatch(ME.MOUSE_CLICK_LEFT, "MOIN")
+        event = getCallArg().event
+        message = getCallArg().message
+        self.assertIsInstance(getCallArg(), Signal)
+        self.assertEqual(event, ME.MOUSE_CLICK_LEFT)
+        self.assertEqual(message, "MOIN")

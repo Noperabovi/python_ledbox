@@ -1,4 +1,4 @@
-from Events import Event, EventManager
+from .Events import Event, EventManager
 from threading import Thread
 import atexit
 

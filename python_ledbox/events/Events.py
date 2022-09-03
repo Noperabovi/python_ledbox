@@ -13,7 +13,7 @@ import logging
 
 logging.basicConfig(
     format="%(levelname)s %(asctime)s     %(message)s",
-    filename="/home/pi/Documents/python_ledbox/eventlog.log",
+    filename="eventlog.log",
     level=logging.DEBUG,
     datefmt="%m/%d/%Y %I:%M:%S %p",
 )

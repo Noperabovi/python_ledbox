@@ -15,3 +15,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Logfiles
+*.log
+
+# Sandbox testing
+/__init__.py

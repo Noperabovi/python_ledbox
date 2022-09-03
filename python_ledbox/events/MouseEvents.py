@@ -1,15 +1,11 @@
-from concurrent.futures import thread
-from Events import Event, EventManager
+from .Events import Event, EventManager
 from threading import Thread
 import atexit
-import time
 
-stop = False
 
-# this seems to be useless
-# def kill():
-#     stop = True
-#     print("klling listenener")
+class MouseEvent(Event):
+    MOUSE_CLICK_LEFT = 1
+    MOUSE_CLICK_RIGHT = 2
 
 
 def startListening():
@@ -19,7 +15,7 @@ def startListening():
     x = 0
     y = 0
 
-    while not stop:
+    while True:
         status, dx, dy = tuple(c for c in mouse.read(3))
 
         left = status & 0x1
@@ -27,29 +23,13 @@ def startListening():
         middle = status & 0x4
 
         if left:
-            EventManager.dispatch(Event.MOUSE_CLICK_LEFT)
+            EventManager.dispatch(MouseEvent.MOUSE_CLICK_LEFT)
         if right:
-            EventManager.dispatch(Event.MOUSE_CLICK_RIGHT)
+            EventManager.dispatch(MouseEvent.MOUSE_CLICK_RIGHT)
 
     print("listener killed")
 
 
-if __name__ == "__main__":
-
-    def rightClickHandler():
-        print("right mouse button clicked")
-
-    def leftClickHandler():
-        print("left mouse button clicked")
-
-    EventManager.addListener(Event.MOUSE_CLICK_RIGHT, rightClickHandler)
-    EventManager.addListener(Event.MOUSE_CLICK_LEFT, leftClickHandler)
-
-    mouseThread: Thread = Thread(target=startListening, daemon=True)
-    mouseThread.start()
-
-    # atexit.register(kill)
-
-    time.sleep(5)
-    # kill()
-    time.sleep(5)
+mouseThread: Thread = Thread(target=startListening, daemon=True)
+mouseThread.start()
+atexit.register(lambda: print("exiting mouse event module"))

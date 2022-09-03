@@ -32,6 +32,14 @@ class TerminalMatrix(Matrix):
 
         self.__printMatrix()
 
+    def clear(self) -> None:
+        """Clear entire matrix (turn off pixels)."""
+
+        print("\033[F" * (self.ROWS + 1))
+
+        for row in range(self.ROWS):
+            print("  " * self.COLS)
+
     def __printMatrix(self):
 
         i = 0

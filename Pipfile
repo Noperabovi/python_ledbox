@@ -13,7 +13,7 @@ pillow = "*"
 rpi-ws281x = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
 
 [pipenv]
 allow_prereleases = true

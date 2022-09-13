@@ -11,7 +11,6 @@ import time
 class TestApp(unittest.TestCase):
     def fake_mainloop(self):
         while True:
-            print("mainloop runing")
             time.sleep(1)
 
     @patch.multiple(App, __abstractmethods__=set())

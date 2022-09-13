@@ -1,6 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Final, Dict
 from python_ledbox.Frames import Frame, FrameStack
+from python_ledbox.events import Event
+
+
+class MatrixEvent(Event):
+    UPDATE = 1
+    REPAINT = 2
 
 
 class Matrix(ABC):

@@ -1,2 +1,2 @@
-from .Events import Event, AppEvent, Signal, EventManager
+from .Events import Signal, EventManager, Event, AppEvent
 from .MouseEvents import MouseEvent

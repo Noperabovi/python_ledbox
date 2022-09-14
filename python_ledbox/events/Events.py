@@ -4,6 +4,7 @@ from enum import Enum
 from queue import Queue
 from collections import defaultdict
 import logging
+from dataclasses import dataclass
 
 # from python_ledbox.events.MouseEvents import MouseEvent
 
@@ -29,10 +30,10 @@ class AppEvent(Event):
     KILL = 3
 
 
+@dataclass
 class Signal:
-    def __init__(self, event: Event, message: Optional[Any] = None):
-        self.event: Event = event
-        self.message: Any = message
+    event: Event
+    message: Optional[Any] = None
 
 
 class EventManager:

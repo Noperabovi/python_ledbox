@@ -11,11 +11,10 @@ import time
 class TestApp(unittest.TestCase):
     def fake_mainloop(self):
         while True:
-            print("mainloop runing")
             time.sleep(1)
 
     @patch.multiple(App, __abstractmethods__=set())
-    @patch.object(App, "_App__mainloop", fake_mainloop)
+    @patch.object(App, "_mainloop", fake_mainloop)
     def test_initialisation_and_start(self):
         """Test that calling start for the first time causes app to be initialized and active."""
 
@@ -31,10 +30,10 @@ class TestApp(unittest.TestCase):
         self.assertTrue(app.isInitialised())
         self.assertTrue(app.isActive())
         self.assertEqual(app.signalQueue.get(block=False).event, AppEvent.START)
-        self.assertTrue(app._App__mainloopThread.is_alive())
+        self.assertTrue(app._mainloopThread.is_alive())
 
     @patch.multiple(App, __abstractmethods__=set())
-    @patch.object(App, "_App__mainloop", fake_mainloop)
+    @patch.object(App, "_mainloop", fake_mainloop)
     def test_stop_stopps_app(self):
         """Test that calling stop() methods makes app be inactive."""
 
@@ -49,7 +48,7 @@ class TestApp(unittest.TestCase):
         self.assertEqual(app.signalQueue.get().event, AppEvent.STOP)
 
     @patch.multiple(App, __abstractmethods__=set())
-    @patch.object(App, "_App__mainloop", fake_mainloop)
+    @patch.object(App, "_mainloop", fake_mainloop)
     def test_kill_calls_stop(self):
         """Test that calling kill() will call stop() by default."""
 
@@ -57,7 +56,7 @@ class TestApp(unittest.TestCase):
         app.start()
 
         # mock stop method to count calls
-        app.stop = MagicMock(side_effect=app.stop)
+        # app.stop = MagicMock(side_effect=app.stop)
         app.signalQueue.get()  # clear start signal in queue
 
         # kill app

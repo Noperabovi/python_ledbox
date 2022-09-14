@@ -9,10 +9,10 @@ class App(ABC):
         self._isActive = False
         self._isInitialised = False
         self.signalQueue: Queue[Signal] = Queue()
-        self.__mainloopThread: Thread = Thread(target=self.__mainloop, daemon=True)
+        self._mainloopThread: Thread = Thread(target=self._mainloop, daemon=True)
 
     @abstractmethod
-    def __mainloop(self) -> None:
+    def _mainloop(self) -> None:
         """Method for running the main app logic. Runs in a different thread and should react to signals from signalQueue. Access to other objects should be controlled through locks."""
 
     def start(self) -> None:
@@ -21,7 +21,7 @@ class App(ABC):
         self._isActive = True
         self._isInitialised = True
         self.signalQueue.put(Signal(AppEvent.START))
-        self.__mainloopThread.start()
+        self._mainloopThread.start()
 
     def stop(self) -> None:
         """Stop app, may not kill all processes if kill() method is implemented. Subclasses should call super().stop() before implementing their own stop method."""

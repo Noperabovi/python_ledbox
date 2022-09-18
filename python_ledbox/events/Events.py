@@ -1,8 +1,9 @@
 import queue
 from typing import Set, Any, Optional, DefaultDict
 from enum import Enum
-from queue import Queue
-from collections import defaultdict
+
+# from queue import Queue
+# from collections import defaultdict
 import logging
 from dataclasses import dataclass
 
@@ -36,16 +37,16 @@ class Signal:
     message: Optional[Any] = None
 
 
-class EventManager:
-    subscribers: DefaultDict[Event, Set[Queue[Signal]]] = defaultdict(lambda: set())
+# class EventManager:
+# subscribers: DefaultDict[Event, Set[Queue[Signal]]] = defaultdict(lambda: set())
 
-    def addListener(event: Event, queue: Queue[Signal]) -> None:
-        EventManager.subscribers[event].add(queue)
+# def addListener(event: Event, queue: Queue[Signal]) -> None:
+#     subscribers[event].add(queue)
 
-    def removeListener(event: Event, queue: Queue[Signal]) -> bool:
-        EventManager.subscribers[event].discard(queue)
+# def removeListener(event: Event, queue: Queue[Signal]) -> bool:
+#     subscribers[event].discard(queue)
 
-    def dispatch(event: Event, message: Optional[Any] = None):
-        logging.debug(f"fired {event} event")
-        for queue in EventManager.subscribers[event]:
-            queue.put(Signal(event, message))
+# def dispatch(event: Event, message: Optional[Any] = None):
+#     logging.debug(f"fired {event} event")
+#     for queue in subscribers[event]:
+#         queue.put(Signal(event, message))

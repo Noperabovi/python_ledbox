@@ -81,6 +81,8 @@ class MainApp(App):
                     self.__matrix.applyChanges(x)
                 case Signal(MatrixEvent.REPAINT, x) if isinstance(x, dict):
                     self.__matrix.applyMap(x)
+                case Signal(MatrixEvent.CLEAR, _):
+                    self.__matrix.clear()
                 case Signal(self.next_app_event, _):
                     self.next_app()
                 case Signal(self.prev_app_event, _):

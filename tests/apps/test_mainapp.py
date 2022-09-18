@@ -127,6 +127,15 @@ class TestMainApp(unittest.TestCase):
         self.assertEqual(1, len(call_args))
         self.assertEqual({1: 1}, call_args[0])
 
+    def test_matrix_clear_on_clear_event(self):
+        """Test that putting a MatrixEvent.CLEAR Signal into the mainapp's signalQueue will call clear on matrix."""
+
+        self.mainApp.start()
+        self.mainApp.signalQueue.put(Signal(MatrixEvent.CLEAR))
+        time.sleep(0.1)
+
+        self.mainApp._MainApp__matrix.clear.assert_called_once()
+
     def test_call_nextapp_on_nextapp_event(self):
         """est that next_app method is called when putting next_app_event signal into queue."""
 

@@ -7,6 +7,7 @@ from python_ledbox.events import Event
 class MatrixEvent(Event):
     UPDATE = 1
     REPAINT = 2
+    CLEAR = 3
 
 
 class Matrix(ABC):

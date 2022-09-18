@@ -75,7 +75,7 @@ class MainApp(App):
             match signal:
                 case Signal(AppEvent.KILL):
                     break
-                case Signal() if not self.isActive():
+                case _ if not self.isActive():
                     continue
                 case Signal(MatrixEvent.UPDATE, x) if isinstance(x, dict):
                     self.__matrix.applyChanges(x)

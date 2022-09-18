@@ -6,7 +6,7 @@ import time
 from python_ledbox.App import App
 from python_ledbox.apps.mainapp import MainApp
 from python_ledbox.events import AppEvent, Signal, MouseEvent
-from python_ledbox.Matrix import MatrixEvent
+from python_ledbox.Matrix import Matrix, MatrixEvent
 from python_ledbox.Frames import Frame, FrameComponent
 
 
@@ -22,7 +22,7 @@ class TestMainApp(unittest.TestCase):
         self.app2: App = App()
         self.signalQueue: Queue[Signal] = Queue()
         self.mainApp: MainApp = MainApp(
-            Mock(), signalQueue=self.signalQueue, apps=[self.app, self.app2]
+            Mock(spec=Matrix), signalQueue=self.signalQueue, apps=[self.app, self.app2]
         )
 
     def test_initialisation_and_start(self):

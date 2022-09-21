@@ -142,4 +142,24 @@ class TestClockApp(unittest.TestCase):
         time.sleep(0.1)
 
         item = matrixQueue.get_nowait()
-        self.assertTrue(item.event, MatrixEvent.CLEAR)
+        self.assertEqual(item.event, MatrixEvent.CLEAR)
+
+    @patch("python_ledbox.apps.clockapp.datetime")
+    def test_update_time_while_displaying(self, mock_datetime):
+        """Test that while to clock is shown it is still being updated."""
+
+        mock_datetime.now = Mock(return_value=datetime(2000, 1, 17, 0, 0, 55))
+
+        matrixQueue: Queue[Signal] = Queue()
+        clockapp: ClockApp = ClockApp(
+            Frame(10, 10), matrixQueue, MouseEvent.MOUSE_CLICK_LEFT, display_duration=10
+        )
+        clockapp.start()
+        clockapp.signalQueue.put(Signal(MouseEvent.MOUSE_CLICK_LEFT))
+        matrixQueue.get()  # clear update
+
+        mock_datetime.now = Mock(return_value=datetime(2000, 1, 17, 0, 1, 0))
+        time.sleep(0.1)
+
+        self.assertEqual(matrixQueue.get_nowait().event, MatrixEvent.CLEAR)
+        self.assertEqual(matrixQueue.get_nowait().event, MatrixEvent.UPDATE)

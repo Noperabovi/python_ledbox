@@ -52,12 +52,23 @@ class ClockApp(App):
     def _mainloop(self) -> None:
 
         signal: Signal = None
+        cur_minute: int = None
 
         while True:
 
-            if self.__turn_off_time != None and datetime.now() > self.__turn_off_time:
-                self.matrixQueue.put(Signal(MatrixEvent.CLEAR))
-                self.__turn_off_time = None
+            now: datetime = datetime.now()
+
+            if self.__turn_off_time != None:
+                if now > self.__turn_off_time:
+                    self.matrixQueue.put(Signal(MatrixEvent.CLEAR))
+                    self.__turn_off_time = None
+                elif now.minute != cur_minute:
+                    cur_minute = now.minute
+                    self.update_time_on_frame(now)
+                    self.matrixQueue.put(Signal(MatrixEvent.CLEAR))
+                    self.matrixQueue.put(
+                        Signal(MatrixEvent.UPDATE, self.frame.getMap())
+                    )
 
             try:
                 signal = self.signalQueue.get(block=True, timeout=0.017)
@@ -71,7 +82,7 @@ class ClockApp(App):
                 case _ if not self.isActive():
                     continue
                 case Signal(self.show_time_event):
-                    now = datetime.now()
+                    cur_minute = now.minute
                     self.update_time_on_frame(now)
                     self.__turn_off_time = now + timedelta(
                         seconds=self.display_duration

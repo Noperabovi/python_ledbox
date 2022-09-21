@@ -1,4 +1,3 @@
-from ast import main
 from python_ledbox.apps import MainApp, ClockApp
 from python_ledbox.Matrix import Matrix
 from python_ledbox.TerminalMatrix import TerminalMatrix
@@ -19,9 +18,10 @@ clockapp = ClockApp(
     matrix.createFrame(),
     main_app_queue,
     MouseEvent.MOUSE_CLICK_LEFT,
-    hour_first_digit_color=Color.pink,
-    hour_second_digit_color=Color.greenyellow,
-    minute_first_digit_color=Color.orangered,
+    hour_first_digit_color=Color.from_rgb(67, 17, 127),
+    hour_second_digit_color=Color.from_rgb(40, 10, 76),
+    minute_first_digit_color=Color.from_rgb(6, 41, 95),
+    minute_second_digit_color=Color.from_rgb(2, 18, 44),
 )
 
 mainapp = MainApp(matrix, main_app_queue, [clockapp])
@@ -29,4 +29,4 @@ mainapp = MainApp(matrix, main_app_queue, [clockapp])
 mainapp.start()
 
 
-time.sleep(100)
+time.sleep(1000)
